@@ -1,28 +1,58 @@
-#include "domain/entities/User.h"
-#include "domain/entities/Income.h"
-#include "domain/entities/Expense.h"
-#include "domain/entities/Budget.h"
+#include "infrastructure/database/PostgresConnection.h"
+#include "infrastructure/repositories/PostgresUserRepository.h"
+#include "infrastructure/repositories/PostgresTransactionRepository.h"
+#include "infrastructure/repositories/PostgresBudgetRepository.h"
+#include "application/services/FinanceManager.h"
+#include "application/services/BudgetService.h"
+#include "application/services/ReportService.h"
+#include "presentation/CLI.h"
+#include "tests/SystemTests.h"
+#include <iostream>
+#include <cstring>
 
-int main() {
+int main(int argc, char* argv[]) {
+    // Check for test mode
+    if (argc > 1 && std::strcmp(argv[1], "--test") == 0) {
+        SystemTests tests;
+        tests.runAllTests();
+        return 0;
+    }
+
     try {
-        Money salaryAmount(5000);
-        Money foodAmount(300);
-        Money foodLimit(1000);
+        // 1. Setup Repositories
+        PostgresUserRepository userRepo;
+        auto transactionRepo = std::make_shared<PostgresTransactionRepository>();
+        auto budgetRepo = std::make_shared<PostgresBudgetRepository>();
 
-        Date d1("2026-01-01");
-        Date d2("2026-01-02");
+        // 2. Create a test user (if not exists)
+        try {
+            userRepo.addUser("Demo User", "demo@example.com");
+        } catch (...) {
+            // Ignore if already exists
+        }
+        
+        // Get the user ID
+        auto user = userRepo.getUserByUsername("Demo User");
+        if (!user) {
+            std::cerr << "Failed to find/create user.\n";
+            return 1;
+        }
+        int userId = user->getId();
+        
+        // 3. Setup Services
+        auto budgetService = std::make_shared<BudgetService>(budgetRepo, userId);
+        auto reportService = std::make_shared<ReportService>();
 
-        Income salary(1, 1, salaryAmount, d1, "Job");
-        Expense food(2, 1, foodAmount, d2, "Food");
-        Budget budget(1, 1, "Food", foodLimit, d2);
+        // 4. Setup Facade
+        auto financeManager = std::make_shared<FinanceManager>(transactionRepo, budgetService, userId);
 
-        salary.print();
-        food.print();
-        budget.print();
+        // 5. Launch CLI
+        CLI cli(financeManager, reportService);
+        cli.run();
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
     }
-    catch (const std::exception& e) {
-        std::cout << "Error: " << e.what() << "\n";
-    }
-
     return 0;
 }

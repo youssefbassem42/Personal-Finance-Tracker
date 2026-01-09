@@ -12,14 +12,14 @@ class Budget{
     Date date;
 
 public:
-    Budget(int id, int userId, std::string category, Money& limit_amount, Date& date) : id(id), userId(userId), category(category), limit_amount(limit_amount), date(date) {}
+    Budget(int id, int userId, std::string category, const Money& limit_amount, const Date& date) : id(id), userId(userId), category(category), limit_amount(limit_amount), date(date) {}
 
     int getId() const { return id; }
     int getUserId() const { return userId; }
     std::string getCategory() const { return category; }
     Money getLimitAmount() const { return limit_amount; }
     Date getDate() const { return date; }
-
+    
     
 
 void print() const {

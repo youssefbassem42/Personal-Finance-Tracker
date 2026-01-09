@@ -1,0 +1,3 @@
+/home/youssef/iti/Personal-Finance-Tracker/build/CMakeFiles/finance_tracker.dir
+/home/youssef/iti/Personal-Finance-Tracker/build/CMakeFiles/edit_cache.dir
+/home/youssef/iti/Personal-Finance-Tracker/build/CMakeFiles/rebuild_cache.dir

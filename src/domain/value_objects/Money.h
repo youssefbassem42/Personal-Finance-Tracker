@@ -17,23 +17,33 @@ public:
     void print() const {
         std::cout << amount << "\n";
     }
-    bool operator<(const Money& other) {
+    bool operator<(const Money& other) const {
         return amount < other.amount;
     }
-    bool operator>(const Money& other) {
+    bool operator>(const Money& other) const {
         return amount > other.amount;
     }
-    Money operator+(const Money& other) {
+    Money operator+(const Money& other) const {
         return Money(amount + other.amount);
     }
-    Money operator-(const Money& other) {
+    Money operator-(const Money& other) const {
         return Money(amount - other.amount);
     }
-    Money operator*(const Money& other) {
+    Money operator*(const Money& other) const {
         return Money(amount * other.amount);
     }
-    Money operator/(const Money& other) {
+    Money operator/(const Money& other) const {
         return Money(amount / other.amount);
+    }
+    
+    Money& operator+=(const Money& other) {
+        amount += other.amount;
+        return *this;
+    }
+    
+    Money& operator-=(const Money& other) {
+        amount -= other.amount;
+        return *this;
     }
 };
 

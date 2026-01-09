@@ -17,7 +17,7 @@ protected:
     Date date;
 
 public:
-    Transaction(int id, int userId, Money& amount, Date& date) : id(id), userId(userId), amount(amount), date(date) {}
+    Transaction(int id, int userId, const Money& amount, const Date& date) : id(id), userId(userId), amount(amount), date(date) {}
 
     int getId() const { return id; }
     int getUserId() const { return userId; }

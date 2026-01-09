@@ -4,24 +4,35 @@
 #include "domain/entities/Income.h"
 #include "domain/entities/Expense.h"
 
+#include "domain/repositories/ITransactionRepository.h"
+
+#include "domain/repositories/ITransactionRepository.h"
+#include "application/services/BudgetService.h"
+
 class FinanceManager {
 private:
-    std::vector<std::shared_ptr<Income>> incomes;
-    std::vector<std::shared_ptr<Expense>> expenses;
+    std::shared_ptr<ITransactionRepository> transactionRepo;
+    std::shared_ptr<BudgetService> budgetService;
+    int currentUserId;
+
 public:
+    FinanceManager(std::shared_ptr<ITransactionRepository> txnRepo, std::shared_ptr<BudgetService> budgetSvc, int userId) 
+        : transactionRepo(txnRepo), budgetService(budgetSvc), currentUserId(userId) {}
+
     void addIncome(const Income& income);
-
-    const std::vector<std::shared_ptr<Income>>& getAllIncomes() const;
-
+    std::vector<std::shared_ptr<Income>> getAllIncomes() const;
     bool updateIncome(int id, const Money& newAmount);
-
     bool deleteIncome(int id);
 
-    void addExpense(const Expense& expenses);
-
-    const std::vector<std::shared_ptr<Expense>>& getAllExpenses() const;
-
+    void addExpense(const Expense& expense);
+    std::vector<std::shared_ptr<Expense>> getAllExpenses() const;
     bool updateExpense(int id, const Money& newAmount);
-
     bool deleteExpense(int id);
+
+    // Budget Management
+    void addBudget(const Budget& budget);
+    bool checkBudget(const std::string& category) const;
+    std::vector<Budget> getAllBudgets() const;
+
+    int getCurrentUserId() const { return currentUserId; }
 };
