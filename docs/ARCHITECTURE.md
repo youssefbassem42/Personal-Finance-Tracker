@@ -6,13 +6,13 @@ The Personal Finance Tracker follows a **Layered Architecture** to ensure separa
 
 ```mermaid
 graph TD
-    User[User] --> CLI[Presentation Layer (CLI)]
-    CLI --> Facade[Application Layer (FinanceManager)]
-    Facade --> Service[Services (BudgetService, ReportService)]
-    Facade --> Repo[Repositories (Interfaces)]
+    User[User] --> CLI["Presentation Layer (CLI)"]
+    CLI --> Facade["Application Layer (FinanceManager)"]
+    Facade --> Service["Services (BudgetService, ReportService)"]
+    Facade --> Repo["Repositories (Interfaces)"]
     Service --> Repo
-    Repo --> Infra[Infrastructure Layer (Postgres Implementation)]
-    Infra --> DB[(PostgreSQL Database)]
+    Repo --> Infra["Infrastructure Layer (Postgres Implementation)"]
+    Infra --> DB[("PostgreSQL Database")]
 ```
 
 ## Layers Description
